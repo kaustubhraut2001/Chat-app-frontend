@@ -4,14 +4,14 @@ import FeatureSection from "@/app/components/base/FeatureSection";
 import UserReviews from "@/app/components/base/UserReviews";
 
 import Footer from "@/app/components/base/Footer";
-// import { authOptions, CustomSession } from "./api/auth/[...nextauth]/options";
-// import { getServerSession } from "next-auth";
+import { authOptions, CustomSession } from "./api/auth/[...nextauth]/options";
+import { getServerSession } from "next-auth";
 export default async function LandingPage() {
-  // const session: CustomSession | null = await getServerSession(authOptions);
+  const session: CustomSession | null = await getServerSession(authOptions);
   return (
     <div className="min-h-screen flex flex-col ">
       {/* Header */}
-      {/* <Navbar user={session?.user ?? null} /> */}
+      <Navbar user={session?.user ?? null} />
       {/* Hero Section */}
       <HeroSection />
 

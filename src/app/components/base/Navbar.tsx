@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-// import { CustomUser } from "@/app/api/auth/[...nextauth]/options";
+import { CustomUser } from "@/app/api/auth/[...nextauth]/options";
 import { Button } from "@/app/components/ui/button";
 import LoginModel from "../auth/LoginModel";
-export default function Navbar({ user }: { user: any | null }
-  // { user: CustomUser | null }
+export default function Navbar({ user }:
+  { user: CustomUser | null }
 ) {
   return (
     <nav className="p-6 flex justify-between items-center bg-white shadow-sm">

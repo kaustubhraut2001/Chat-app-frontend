@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/app/components/ui/input";
 import {Button} from "@/app/components/ui/button";
 
 export default function Footer() {

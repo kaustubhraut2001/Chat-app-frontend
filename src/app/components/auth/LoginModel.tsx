@@ -8,11 +8,20 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "../ui/button"
-import Image from "next/image"
+import Image from "next/image";
+import { signIn } from "next-auth/react";
 export default function LoginModal() {
+
+	const handleLogin = async () => {
+		signIn('google', {
+			callbackUrl: '/dashboard',
+			redirect: true
+		})
+
+	};
 	return (
 		<Dialog>
-			<DialogTrigger asChild>Getting Start</DialogTrigger>
+			<DialogTrigger asChild><Button>Getting start</Button></DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>Welcome to chat APP</DialogTitle>
@@ -20,7 +29,7 @@ export default function LoginModal() {
 						Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, provident repudiandae tempora iusto numquam nulla porro laudantium dolore sint cupiditate aliquam odio pariatur aspernatur officiis. Optio totam magni nisi labore!
 					</DialogDescription>
 				</DialogHeader>
-				<Button variant={"outline"}>
+				<Button variant={"outline"} onClick={handleLogin}>
 					<Image src="/images/google.png"
 						className=" mr-4"
 						width={25}

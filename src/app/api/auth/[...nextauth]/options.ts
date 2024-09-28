@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 export interface CustomSession {
 	user?: CustomUser;
 	expires: ISODateString;
-}
+};
 export interface CustomUser {
 	id?: string | null;
 	name?: string | null;

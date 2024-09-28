@@ -2,13 +2,12 @@
 import React from "react";
 import ProfileMenu from "../components/auth/ProfileMenu";
 
-export default function DashNav({
-	image,
-	name,
-}: {
-	image?: string;
+interface DashNavProps {
 	name: string;
-}) {
+	image?: string;
+}
+
+const DashNav: React.FC<DashNavProps> = ({ name, image }) => {
 	return (
 		<nav className="py-2 px-6 flex justify-between items-center bg-white shadow-sm">
 			<h1 className="text-xl md:text-2xl font-extrabold">QuickChat</h1>
@@ -17,4 +16,6 @@ export default function DashNav({
 			</div>
 		</nav>
 	);
-}
+};
+
+export default DashNav;

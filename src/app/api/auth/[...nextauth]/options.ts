@@ -2,9 +2,9 @@ import { Account, AuthOptions, ISODateString, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import GoogleProvider from "next-auth/providers/google";
 import axios, { AxiosError } from "axios";
-// import { LOGIN_URL } from "@/lib/apiAuthRoutes";
+import { LOGIN_URL } from "@/lib/apiEndPoints";
 import { redirect } from "next/navigation";
-const LOGIN_URL = "";
+
 export interface CustomSession {
 	user?: CustomUser;
 	expires: ISODateString;
@@ -37,12 +37,18 @@ export const authOptions: AuthOptions = {
 					provider: account?.provider!,
 					image: user?.image,
 				};
+				// console.log(payload
+				// 	, "payload"
+				// );
 				const { data } = await axios.post(LOGIN_URL, payload);
+				console.log(data , "data");
 
 				user.id = data?.user?.id?.toString();
 				user.token = data?.user?.token;
+				user.provider = data?.user?.provider;
 				return true;
 			} catch (error) {
+				console.log(error , "error");
 				if (error instanceof AxiosError) {
 					return redirect(`/auth/error?message=${error.message}`);
 				}
@@ -76,7 +82,7 @@ export const authOptions: AuthOptions = {
 	providers: [
 		GoogleProvider({
 			clientId: process.env.GOOGLE_CLIENT_ID!,
-			clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+			clientSecret: process.env.GOOGLE_CLIENT_SECREAT!,
 			authorization: {
 				params: {
 					prompt: "consent",

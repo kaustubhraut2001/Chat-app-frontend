@@ -14,4 +14,4 @@ function SessionProvider({ children }: { children: React.ReactNode }) {
 	)
 }
 
-export default SessionProvider
+export default SessionProvider;

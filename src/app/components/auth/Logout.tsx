@@ -1,5 +1,5 @@
-'use client'
-import React from 'react'
+"use client";
+import React, { Dispatch, SetStateAction } from "react";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -9,30 +9,36 @@ import {
 	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogTitle,
-	AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
+import { signOut } from "next-auth/react";
 
-
-function Logout() {
+export default function LogoutModal({
+	open,
+	setOpen,
+}: {
+	open: boolean;
+	setOpen: Dispatch<SetStateAction<boolean>>;
+}) {
+	const handleLogout = () => {
+		signOut({
+			callbackUrl: "/",
+			redirect: true,
+		});
+	};
 	return (
-		<AlertDialog>
-			<AlertDialogTrigger>Open</AlertDialogTrigger>
+		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
 					<AlertDialogDescription>
-						This action cannot be undone. This will permanently delete your account
-						and remove your data from our servers.
+						This action will expire your session.
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
 					<AlertDialogCancel>Cancel</AlertDialogCancel>
-					<AlertDialogAction>Continue</AlertDialogAction>
+					<AlertDialogAction onClick={handleLogout}>Continue</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>
-
-	)
+	);
 }
-
-export default Logout

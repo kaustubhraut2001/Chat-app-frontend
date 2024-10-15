@@ -18,8 +18,8 @@ export default function Navbar({ user }:
           <LoginModel />
 
         ) : (
-          <Link href="/dashboard">
-            <Button>Dashboard</Button>
+          <Link href="/dashboard" passHref>
+            <Button as="a">Dashboard</Button>
           </Link>
         )}
       </div>

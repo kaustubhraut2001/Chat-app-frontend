@@ -6,90 +6,95 @@ import { LOGIN_URL } from "@/lib/apiEndPoints";
 import { redirect } from "next/navigation";
 
 export interface CustomSession {
-	user?: CustomUser;
-	expires: ISODateString;
-};
-export interface CustomUser {
-	id?: string | null;
-	name?: string | null;
-	email?: string | null;
-	image?: string | null;
-	provider?: string | null;
-	token?: string | null;
+  user?: CustomUser;
+  expires: ISODateString;
 }
+export interface CustomUser {
+  id?: string | null;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+  provider?: string | null;
+  token?: string | null;
+}
+
+console.log("NEXTAUTH_SECRET:", process.env.NEXTAUTH_SECRET);
+
 export const authOptions: AuthOptions = {
-	pages: {
-		signIn: "/",
-	},
-	callbacks: {
-		async signIn({
-			user,
-			account,
-		}: {
-			user: CustomUser;
-			account: Account | null;
-		}) {
-			try {
-				const payload = {
-					email: user.email!,
-					name: user.name!,
-					oauth_id: account?.providerAccountId!,
-					provider: account?.provider!,
-					image: user?.image,
-				};
-				// console.log(payload
-				// 	, "payload"
-				// );
-				const { data } = await axios.post(LOGIN_URL, payload);
-				console.log(data , "data");
+  pages: {
+    signIn: "/",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    async signIn({
+      user,
+      account,
+    }: {
+      user: CustomUser;
+      account: Account | null;
+    }) {
+      try {
+        const payload = {
+          email: user.email!,
+          name: user.name!,
+          oauth_id: account?.providerAccountId!,
+          provider: account?.provider!,
+          image: user?.image,
+        };
+        // console.log(payload
+        // 	, "payload"
+        // );
+        const { data } = await axios.post(LOGIN_URL, payload);
+        console.log(data, "data");
 
-				user.id = data?.user?.id?.toString();
-				user.token = data?.user?.token;
-				user.provider = data?.user?.provider;
-				return true;
-			} catch (error) {
-				console.log(error , "error");
-				if (error instanceof AxiosError) {
-					return redirect(`/auth/error?message=${error.message}`);
-				}
-				return redirect(
-					`/auth/error?message=Something went wrong.please try again!`
-				);
-			}
-		},
+        user.id = data?.user?.id?.toString();
+        user.token = data?.user?.token;
+        user.provider = data?.user?.provider;
+        return true;
+      } catch (error) {
+        console.log(error, "error");
+        if (error instanceof AxiosError) {
+          return redirect(`/auth/error?message=${error.message}`);
+        }
+        return redirect(
+          `/auth/error?message=Something went wrong.please try again!`
+        );
+      }
+    },
 
-		async jwt({ token, user }) {
-			if (user) {
-				token.user = user;
-			}
-			return token;
-		},
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user;
+      }
+      return token;
+    },
 
-		async session({
-			session,
-			token,
-			user,
-		}: {
-			session: CustomSession;
-			token: JWT;
-			user: User;
-		}) {
-			session.user = token.user as CustomUser;
-			return session;
-		},
-	},
+    async session({
+      session,
+      token,
+      user,
+    }: {
+      session: CustomSession;
+      token: JWT;
+      user: User;
+    }) {
+      session.user = token.user as CustomUser;
+      return session;
+    },
+  },
 
-	providers: [
-		GoogleProvider({
-			clientId: process.env.GOOGLE_CLIENT_ID!,
-			clientSecret: process.env.GOOGLE_CLIENT_SECREAT!,
-			authorization: {
-				params: {
-					prompt: "consent",
-					access_type: "offline",
-					response_type: "code",
-				},
-			},
-		}),
-	],
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECREAT!,
+      checks: ['none'],
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
+    }),
+  ],
 };
